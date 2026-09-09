@@ -2,7 +2,6 @@
 <html lang="ko">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -10,23 +9,17 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <meta
-    name="theme-color"
-    content="#ffffff"
-  >
+  <meta name="theme-color" content="#ffffff">
 
   <title>한걸음 노트 알림 설정</title>
 
-
   <style>
-
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      padding: 0;
       background: #f7f7f5;
       font-family:
         Pretendard,
@@ -40,26 +33,25 @@
     .page {
       min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       padding: 24px;
     }
 
     .card {
       width: 100%;
       max-width: 440px;
-      background: white;
-      border-radius: 28px;
       padding: 34px 26px;
-      box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.08);
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
     }
 
     .eyebrow {
+      margin-bottom: 10px;
+      color: #777;
       font-size: 13px;
       font-weight: 700;
-      color: #777;
-      margin-bottom: 10px;
     }
 
     h1 {
@@ -71,44 +63,44 @@
     .description {
       margin: 0 0 28px;
       color: #666;
-      line-height: 1.7;
       font-size: 15px;
+      line-height: 1.7;
     }
 
     .notice {
+      margin-bottom: 24px;
+      padding: 18px;
       background: #f4f5f1;
       border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 24px;
     }
 
     .notification-title {
+      margin-bottom: 5px;
       font-size: 14px;
       font-weight: 800;
-      margin-bottom: 5px;
     }
 
     .notification-body {
-      font-size: 14px;
       color: #555;
+      font-size: 14px;
     }
 
     label {
       display: block;
+      margin-bottom: 8px;
       font-size: 13px;
       font-weight: 700;
-      margin-bottom: 8px;
     }
 
     input {
       width: 100%;
       height: 52px;
+      margin-bottom: 14px;
+      padding: 0 16px;
       border: 1px solid #ddd;
       border-radius: 14px;
-      padding: 0 16px;
-      font-size: 17px;
       outline: none;
-      margin-bottom: 14px;
+      font-size: 17px;
     }
 
     input:focus {
@@ -121,7 +113,7 @@
       border: 0;
       border-radius: 16px;
       background: #222;
-      color: white;
+      color: #fff;
       font-size: 16px;
       font-weight: 800;
       cursor: pointer;
@@ -133,14 +125,14 @@
     }
 
     .status {
-      margin-top: 18px;
+      display: none;
       min-height: 48px;
+      margin-top: 18px;
       padding: 14px 16px;
-      border-radius: 14px;
       background: #f5f5f5;
+      border-radius: 14px;
       font-size: 14px;
       line-height: 1.6;
-      display: none;
     }
 
     .status.show {
@@ -157,41 +149,32 @@
 
     .small {
       margin-top: 20px;
+      color: #888;
       font-size: 12px;
       line-height: 1.7;
-      color: #888;
     }
-
   </style>
-
 </head>
-
 
 <body>
 
   <div class="page">
-
     <div class="card">
 
       <div class="eyebrow">
         교사용 설정
       </div>
 
-
       <h1>
         한걸음 노트 알림
       </h1>
 
-
       <p class="description">
-        이 휴대폰을 한 번 등록하면
-        누군가 새로운 한걸음 노트를 작성했을 때
-        휴대폰으로 알림을 받을 수 있습니다.
+        이 휴대폰을 한 번 등록하면 누군가 새로운 한걸음 노트를
+        작성했을 때 휴대폰으로 알림을 받을 수 있습니다.
       </p>
 
-
       <div class="notice">
-
         <div class="notification-title">
           한걸음 노트
         </div>
@@ -199,14 +182,11 @@
         <div class="notification-body">
           한걸음 노트를 작성했어요!
         </div>
-
       </div>
-
 
       <label for="pin">
         교사 인증번호
       </label>
-
 
       <input
         id="pin"
@@ -216,7 +196,6 @@
         placeholder="인증번호 입력"
       >
 
-
       <button
         id="registerButton"
         type="button"
@@ -224,24 +203,19 @@
         이 휴대폰에서 알림 받기
       </button>
 
-
       <div
         id="status"
         class="status"
       ></div>
 
-
       <div class="small">
-        이 설정은 알림을 받을 선생님 휴대폰에서만 하면 됩니다.
-        아이들의 휴대폰에서는 별도로 설정할 필요가 없습니다.
+        알림을 받을 선생님 휴대폰에서만 한 번 설정하면 됩니다.
+        아이들의 휴대폰에서는 별도로 알림을 등록할 필요가 없습니다.
       </div>
 
     </div>
-
   </div>
 
-
-  <!-- Firebase -->
 
   <script
     src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"
@@ -254,14 +228,9 @@
 
   <script>
 
-    /* ========================================================
-       Firebase 설정
-    ======================================================== */
-
     const firebaseConfig = {
-
       apiKey:
-        "AIzaSyDTNuVYyxKOi6awIo_xEES9ORqEG40gGto",
+        "AIzaSyDTNuVYyxKOj6awIo_xEES9ORqEG40gGto",
 
       authDomain:
         "hangeoreum-note.firebaseapp.com",
@@ -280,65 +249,38 @@
 
       measurementId:
         "G-1CTL24EHQK"
-
     };
 
 
-    /*
-     * Firebase → Cloud Messaging →
-     * 웹 푸시 인증서에서 생성한 공개 VAPID 키
-     */
     const VAPID_KEY =
       "BC2wY1FRQ6KqsIpc7qjEMB-riL40aQA2gsmS4aACHFQTsYPXX8n8qQo6u35U1l0OCGdIL-utXXoaiNusyQjJyAo";
 
 
-    /*
-     * 현재 실제 한걸음 노트 Apps Script 주소
-     */
     const GAS_WEB_APP_URL =
       "https://script.google.com/macros/s/AKfycbzhXOD55ewT4i3WdoSa3WDlAfIsZcLjngiY5NJ6vDJWl-aEJ_I-9KURDlhyNXCM1eqpKQ/exec";
 
 
-    firebase.initializeApp(
-      firebaseConfig
-    );
-
+    firebase.initializeApp(firebaseConfig);
 
     const messaging =
       firebase.messaging();
 
 
     const button =
-      document.getElementById(
-        "registerButton"
-      );
-
+      document.getElementById("registerButton");
 
     const pinInput =
-      document.getElementById(
-        "pin"
-      );
-
+      document.getElementById("pin");
 
     const statusBox =
-      document.getElementById(
-        "status"
-      );
+      document.getElementById("status");
 
 
-    function showStatus(
-      message,
-      type
-    ) {
-
-      statusBox.textContent =
-        message;
-
+    function showStatus(message, type) {
+      statusBox.textContent = message;
 
       statusBox.className =
-        "status show " +
-        (type || "");
-
+        "status show " + (type || "");
     }
 
 
@@ -350,23 +292,17 @@
           pinInput.value.trim();
 
 
-        if (
-          pin.length !== 4
-        ) {
-
+        if (pin.length !== 4) {
           showStatus(
             "교사 인증번호 4자리를 입력해 주세요.",
             "error"
           );
 
           return;
-
         }
 
 
-        button.disabled =
-          true;
-
+        button.disabled = true;
 
         button.textContent =
           "등록 중...";
@@ -374,46 +310,28 @@
 
         try {
 
-          /*
-           * 브라우저가 알림 기능을 지원하는지 확인
-           */
-          if (
-            !("serviceWorker" in navigator)
-          ) {
-
+          if (!("serviceWorker" in navigator)) {
             throw new Error(
               "이 브라우저에서는 알림 기능을 사용할 수 없습니다."
             );
-
           }
 
 
-          if (
-            !("Notification" in window)
-          ) {
-
+          if (!("Notification" in window)) {
             throw new Error(
               "이 브라우저에서는 알림 기능을 사용할 수 없습니다."
             );
-
           }
 
 
-          /*
-           * 알림 권한 요청
-           */
           const permission =
             await Notification.requestPermission();
 
 
-          if (
-            permission !== "granted"
-          ) {
-
+          if (permission !== "granted") {
             throw new Error(
-              "알림 권한이 허용되지 않았습니다. 브라우저 설정에서 알림을 허용해 주세요."
+              "알림 권한이 허용되지 않았습니다. 휴대폰의 브라우저 알림 설정을 확인해 주세요."
             );
-
           }
 
 
@@ -424,80 +342,58 @@
 
 
           /*
-           * GitHub Pages에 올릴
-           * firebase-messaging-sw.js 등록
+           * 기존 sw.js와 충돌하지 않도록
+           * Firebase 알림 전용 scope 사용
            */
           const registration =
             await navigator.serviceWorker.register(
-              "./firebase-messaging-sw.js"
+              "./firebase-messaging-sw.js",
+              {
+                scope: "./push/"
+              }
             );
 
 
           await navigator.serviceWorker.ready;
 
 
-          /*
-           * 이 휴대폰의 FCM 토큰 생성
-           */
           const token =
             await messaging.getToken({
-
-              vapidKey:
-                VAPID_KEY,
-
-              serviceWorkerRegistration:
-                registration
-
+              vapidKey: VAPID_KEY,
+              serviceWorkerRegistration: registration
             });
 
 
           if (!token) {
-
             throw new Error(
-              "휴대폰 알림 토큰을 만들지 못했습니다."
+              "휴대폰 알림 정보를 만들지 못했습니다."
             );
-
           }
 
 
-          /*
-           * Apps Script 데이터베이스에
-           * 이 휴대폰의 토큰 등록
-           *
-           * 외부 GitHub → Apps Script 요청이라
-           * no-cors 모드 사용
-           */
           const registerUrl =
             GAS_WEB_APP_URL
-            +
-            "?action=registerPushToken"
-            +
-            "&pin="
-            +
-            encodeURIComponent(
-              pin
-            )
-            +
-            "&token="
-            +
-            encodeURIComponent(
-              token
-            );
+            + "?action=registerPushToken"
+            + "&pin="
+            + encodeURIComponent(pin)
+            + "&token="
+            + encodeURIComponent(token);
 
 
+          /*
+           * GitHub Pages → Apps Script 외부 요청
+           */
           await fetch(
             registerUrl,
             {
-              mode: "no-cors"
+              mode: "no-cors",
+              cache: "no-store"
             }
           );
 
 
-          /*
-           * 등록 성공
-           */
           showStatus(
-            "등록되었습니다. 이제 이 휴대폰으로 한걸음 노트 알림이 옵니다.",
+            "등록 요청을 보냈습니다. 이제 실제 알림 테스트를 진행하면 됩니다.",
             "success"
           );
 
@@ -508,58 +404,32 @@
 
         } catch (error) {
 
-          console.error(
-            error
-          );
-
+          console.error(error);
 
           showStatus(
             error.message ||
-            "알림 등록 중 오류가 발생했습니다.",
+              "알림 등록 중 오류가 발생했습니다.",
             "error"
           );
 
 
-          button.disabled =
-            false;
-
+          button.disabled = false;
 
           button.textContent =
             "이 휴대폰에서 알림 받기";
-
         }
 
       }
     );
 
 
-    /*
-     * 알림 등록 페이지를 열어둔 상태에서
-     * 알림이 도착했을 때
-     */
     messaging.onMessage(
-      function(payload) {
+      function (payload) {
 
         console.log(
           "Foreground FCM:",
           payload
         );
-
-
-        if (
-          Notification.permission ===
-          "granted"
-        ) {
-
-          new Notification(
-            "한걸음 노트",
-            {
-              body:
-                "한걸음 노트를 작성했어요!"
-            }
-          );
-
-        }
 
       }
     );
@@ -567,5 +437,4 @@
   </script>
 
 </body>
-
 </html>
