@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
-
-  <meta name="theme-color" content="#ffffff">
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
 
   <title>한걸음 노트 알림 설정</title>
+
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
 
   <style>
     * {
@@ -20,421 +20,617 @@
 
     body {
       margin: 0;
-      background: #f7f7f5;
+      min-height: 100vh;
       font-family:
-        Pretendard,
         -apple-system,
         BlinkMacSystemFont,
-        "Segoe UI",
+        "Pretendard",
+        "Noto Sans KR",
         sans-serif;
-      color: #202020;
-    }
-
-    .page {
-      min-height: 100vh;
+      background: #fffaf0;
+      color: #334155;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       padding: 24px;
     }
 
     .card {
       width: 100%;
-      max-width: 440px;
-      padding: 34px 26px;
-      background: #fff;
-      border-radius: 28px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+      max-width: 420px;
+      background: white;
+      border: 1px solid #fde7b0;
+      border-radius: 24px;
+      padding: 28px 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
     }
 
-    .eyebrow {
-      margin-bottom: 10px;
-      color: #777;
-      font-size: 13px;
-      font-weight: 700;
+    .icon {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 16px;
+      border-radius: 20px;
+      background: #f59e0b;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
     }
 
     h1 {
-      margin: 0 0 10px;
-      font-size: 28px;
-      line-height: 1.3;
+      margin: 0;
+      text-align: center;
+      font-size: 22px;
+      color: #92400e;
     }
 
-    .description {
-      margin: 0 0 28px;
-      color: #666;
-      font-size: 15px;
+    .desc {
+      margin: 12px 0 24px;
+      text-align: center;
+      font-size: 14px;
       line-height: 1.7;
+      color: #64748b;
     }
 
-    .notice {
-      margin-bottom: 24px;
-      padding: 18px;
-      background: #f4f5f1;
-      border-radius: 18px;
-    }
-
-    .notification-title {
-      margin-bottom: 5px;
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    .notification-body {
-      color: #555;
-      font-size: 14px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    input {
-      width: 100%;
-      height: 52px;
-      margin-bottom: 14px;
-      padding: 0 16px;
-      border: 1px solid #ddd;
+    .status {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
       border-radius: 14px;
-      outline: none;
-      font-size: 17px;
-    }
-
-    input:focus {
-      border-color: #555;
+      padding: 13px;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 16px;
     }
 
     button {
       width: 100%;
-      height: 56px;
       border: 0;
-      border-radius: 16px;
-      background: #222;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 800;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     button:disabled {
-      opacity: 0.45;
+      opacity: 0.55;
       cursor: default;
     }
 
-    .status {
-      display: none;
-      min-height: 48px;
-      margin-top: 18px;
-      padding: 14px 16px;
-      background: #f5f5f5;
-      border-radius: 14px;
-      font-size: 14px;
-      line-height: 1.6;
+    .enable {
+      background: #f59e0b;
+      color: white;
     }
 
-    .status.show {
-      display: block;
+    .disable {
+      background: #f1f5f9;
+      color: #475569;
     }
 
-    .status.success {
-      background: #eef7ef;
-    }
-
-    .status.error {
-      background: #fff0f0;
+    .back {
+      background: white;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
     }
 
     .small {
-      margin-top: 20px;
-      color: #888;
-      font-size: 12px;
-      line-height: 1.7;
+      font-size: 11px;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.6;
     }
   </style>
 </head>
 
 <body>
+  <div class="card">
 
-  <div class="page">
-    <div class="card">
+    <div class="icon">🔔</div>
 
-      <div class="eyebrow">
-        교사용 설정
-      </div>
+    <h1>한걸음 노트 알림</h1>
 
-      <h1>
-        한걸음 노트 알림
-      </h1>
+    <p class="desc">
+      다른 친구가 새로운 한걸음 노트를 작성하면<br>
+      이 휴대폰으로 알림을 받을 수 있어요.
+    </p>
 
-      <p class="description">
-        이 휴대폰을 한 번 등록하면 누군가 새로운 한걸음 노트를
-        작성했을 때 휴대폰으로 알림을 받을 수 있습니다.
-      </p>
-
-      <div class="notice">
-        <div class="notification-title">
-          한걸음 노트
-        </div>
-
-        <div class="notification-body">
-          한걸음 노트를 작성했어요!
-        </div>
-      </div>
-
-      <label for="pin">
-        교사 인증번호
-      </label>
-
-      <input
-        id="pin"
-        type="password"
-        inputmode="numeric"
-        maxlength="4"
-        placeholder="인증번호 입력"
-      >
-
-      <button
-        id="registerButton"
-        type="button"
-      >
-        이 휴대폰에서 알림 받기
-      </button>
-
-      <div
-        id="status"
-        class="status"
-      ></div>
-
-      <div class="small">
-        알림을 받을 선생님 휴대폰에서만 한 번 설정하면 됩니다.
-        아이들의 휴대폰에서는 별도로 알림을 등록할 필요가 없습니다.
-      </div>
-
+    <div id="status" class="status">
+      알림 상태를 확인하고 있어요.
     </div>
+
+    <button
+      id="enableBtn"
+      class="enable"
+      type="button"
+    >
+      이 휴대폰에서 알림 받기
+    </button>
+
+    <button
+      id="disableBtn"
+      class="disable"
+      type="button"
+    >
+      이 휴대폰 알림 끄기
+    </button>
+
+    <button
+      id="backBtn"
+      class="back"
+      type="button"
+    >
+      한걸음 노트로 돌아가기
+    </button>
+
+    <p class="small">
+      알림에는 이름, 기도제목, 말씀 내용 등 개인 정보가 표시되지 않습니다.
+    </p>
+
   </div>
 
+<script>
 
-  <script
-    src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"
-  ></script>
-
-  <script
-    src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"
-  ></script>
-
-
-  <script>
-
-    const firebaseConfig = {
-      apiKey:
-        "AIzaSyDTNuVYyxKOj6awIo_xEES9ORqEG40gGto",
-
-      authDomain:
-        "hangeoreum-note.firebaseapp.com",
-
-      projectId:
-        "hangeoreum-note",
-
-      storageBucket:
-        "hangeoreum-note.firebasestorage.app",
-
-      messagingSenderId:
-        "664829259339",
-
-      appId:
-        "1:664829259339:web:4c0eea7dac460cfa0a8e7ce",
-
-      measurementId:
-        "G-1CTL24EHQK"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyDTNuVYyxKOj6awIo_xEES9ORqEG40gGto",
+  authDomain: "hangeoreum-note.firebaseapp.com",
+  projectId: "hangeoreum-note",
+  storageBucket: "hangeoreum-note.firebasestorage.app",
+  messagingSenderId: "664829259339",
+  appId: "1:664829259339:web:4c0eea7dac460cfa0a8e7ce",
+  measurementId: "G-1CTL24EHQK"
+};
 
 
-    const VAPID_KEY =
-      "BC2wY1FRQ6KqsIpc7qjEMB-riL40aQA2gsmS4aACHFQTsYPXX8n8qQo6u35U1l0OCGdIL-utXXoaiNusyQjJyAo";
+const VAPID_KEY =
+  "BC2wY1FRQ6KqsIpc7qjEMB-riL40aQA2gsmS4aACHFQTsYPXX8n8qQo6u35U1l0OCGdIL-utXXoaiNusyQjJyAo";
 
 
-    const GAS_WEB_APP_URL =
-      "https://script.google.com/macros/s/AKfycbzhXOD55ewT4i3WdoSa3WDlAfIsZcLjngiY5NJ6vDJWl-aEJ_I-9KURDlhyNXCM1eqpKQ/exec";
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbzhXOD55ewT4i3WdoSa3WDlAfIsZcLjngiY5NJ6vDJWl-aEJ_I-9KURDlhyNXCM1eqpKQ/exec";
 
 
-    firebase.initializeApp(firebaseConfig);
-
-    const messaging =
-      firebase.messaging();
+const APP_URL =
+  "https://script.google.com/macros/s/AKfycbzhXOD55ewT4i3WdoSa3WDlAfIsZcLjngiY5NJ6vDJWl-aEJ_I-9KURDlhyNXCM1eqpKQ/exec";
 
 
-    const button =
-      document.getElementById("registerButton");
-
-    const pinInput =
-      document.getElementById("pin");
-
-    const statusBox =
-      document.getElementById("status");
+firebase.initializeApp(
+  firebaseConfig
+);
 
 
-    function showStatus(message, type) {
-      statusBox.textContent = message;
+const messaging =
+  firebase.messaging();
 
-      statusBox.className =
-        "status show " + (type || "");
+
+const statusBox =
+  document.getElementById(
+    "status"
+  );
+
+
+const enableBtn =
+  document.getElementById(
+    "enableBtn"
+  );
+
+
+const disableBtn =
+  document.getElementById(
+    "disableBtn"
+  );
+
+
+const backBtn =
+  document.getElementById(
+    "backBtn"
+  );
+
+
+function setStatus(
+  message
+) {
+
+  statusBox.textContent =
+    message;
+
+}
+
+
+function setBusy(
+  busy
+) {
+
+  enableBtn.disabled =
+    busy;
+
+  disableBtn.disabled =
+    busy;
+
+}
+
+
+async function getMessagingRegistration() {
+
+  if (
+    !("serviceWorker" in navigator)
+  ) {
+
+    throw new Error(
+      "이 브라우저에서는 알림 기능을 사용할 수 없습니다."
+    );
+
+  }
+
+
+  const registration =
+    await navigator
+      .serviceWorker
+      .register(
+        "./firebase-messaging-sw.js",
+        {
+          scope:
+            "./push/"
+        }
+      );
+
+
+  await navigator
+    .serviceWorker
+    .ready;
+
+
+  return registration;
+
+}
+
+
+async function enableNotifications() {
+
+  try {
+
+    setBusy(
+      true
+    );
+
+
+    if (
+      !("Notification" in window)
+    ) {
+
+      throw new Error(
+        "이 브라우저는 알림을 지원하지 않습니다."
+      );
+
     }
 
 
-    button.addEventListener(
-      "click",
-      async function () {
-
-        const pin =
-          pinInput.value.trim();
+    setStatus(
+      "알림 권한을 확인하고 있어요."
+    );
 
 
-        if (pin.length !== 4) {
-          showStatus(
-            "교사 인증번호 4자리를 입력해 주세요.",
-            "error"
-          );
-
-          return;
-        }
+    const permission =
+      await Notification
+        .requestPermission();
 
 
-        button.disabled = true;
+    if (
+      permission !==
+      "granted"
+    ) {
 
-        button.textContent =
-          "등록 중...";
+      setStatus(
+        "알림이 허용되지 않았어요. 브라우저 설정에서 알림을 허용해 주세요."
+      );
 
+      return;
 
-        try {
-
-          if (!("serviceWorker" in navigator)) {
-            throw new Error(
-              "이 브라우저에서는 알림 기능을 사용할 수 없습니다."
-            );
-          }
-
-
-          if (!("Notification" in window)) {
-            throw new Error(
-              "이 브라우저에서는 알림 기능을 사용할 수 없습니다."
-            );
-          }
+    }
 
 
-          const permission =
-            await Notification.requestPermission();
+    setStatus(
+      "이 휴대폰을 알림 기기로 등록하고 있어요."
+    );
 
 
-          if (permission !== "granted") {
-            throw new Error(
-              "알림 권한이 허용되지 않았습니다. 휴대폰의 브라우저 알림 설정을 확인해 주세요."
-            );
-          }
+    const registration =
+      await getMessagingRegistration();
 
 
-          showStatus(
-            "알림 기기를 등록하고 있습니다.",
-            ""
-          );
+    const token =
+      await messaging
+        .getToken({
+
+          vapidKey:
+            VAPID_KEY,
+
+          serviceWorkerRegistration:
+            registration
+
+        });
 
 
-          /*
-           * 기존 sw.js와 충돌하지 않도록
-           * Firebase 알림 전용 scope 사용
-           */
-          const registration =
-            await navigator.serviceWorker.register(
-              "./firebase-messaging-sw.js",
-              {
-                scope: "./push/"
-              }
-            );
+    if (!token) {
+
+      throw new Error(
+        "알림 기기 정보를 만들지 못했습니다."
+      );
+
+    }
 
 
-          await navigator.serviceWorker.ready;
+    const registerUrl =
+      GAS_URL +
+      "?action=registerPushToken" +
+      "&token=" +
+      encodeURIComponent(
+        token
+      ) +
+      "&_=" +
+      Date.now();
 
 
-          const token =
-            await messaging.getToken({
-              vapidKey: VAPID_KEY,
-              serviceWorkerRegistration: registration
-            });
+    await fetch(
+      registerUrl,
+      {
+        method:
+          "GET",
 
+        mode:
+          "no-cors",
 
-          if (!token) {
-            throw new Error(
-              "휴대폰 알림 정보를 만들지 못했습니다."
-            );
-          }
-
-
-          const registerUrl =
-            GAS_WEB_APP_URL
-            + "?action=registerPushToken"
-            + "&pin="
-            + encodeURIComponent(pin)
-            + "&token="
-            + encodeURIComponent(token);
-
-
-          /*
-           * GitHub Pages → Apps Script 외부 요청
-           */
-          await fetch(
-            registerUrl,
-            {
-              mode: "no-cors",
-              cache: "no-store"
-            }
-          );
-
-
-          showStatus(
-            "등록 요청을 보냈습니다. 이제 실제 알림 테스트를 진행하면 됩니다.",
-            "success"
-          );
-
-
-          button.textContent =
-            "알림 등록 완료";
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          showStatus(
-            error.message ||
-              "알림 등록 중 오류가 발생했습니다.",
-            "error"
-          );
-
-
-          button.disabled = false;
-
-          button.textContent =
-            "이 휴대폰에서 알림 받기";
-        }
-
+        cache:
+          "no-store"
       }
     );
 
 
-    messaging.onMessage(
-      function (payload) {
+    localStorage.setItem(
+      "hangeoreum_push_token",
+      token
+    );
 
-        console.log(
-          "Foreground FCM:",
-          payload
+
+    localStorage.setItem(
+      "hangeoreum_push_enabled",
+      "yes"
+    );
+
+
+    setStatus(
+      "알림이 켜졌어요. 이제 새로운 한걸음 노트가 작성되면 알림을 받을 수 있어요."
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    setStatus(
+      "알림 설정 중 오류가 발생했어요: " +
+      (
+        error &&
+        error.message
+          ? error.message
+          : String(error)
+      )
+    );
+
+  }
+  finally {
+
+    setBusy(
+      false
+    );
+
+  }
+
+}
+
+
+async function disableNotifications() {
+
+  try {
+
+    setBusy(
+      true
+    );
+
+
+    setStatus(
+      "알림을 끄고 있어요."
+    );
+
+
+    const savedToken =
+      localStorage.getItem(
+        "hangeoreum_push_token"
+      );
+
+
+    if (
+      savedToken
+    ) {
+
+      const unregisterUrl =
+        GAS_URL +
+        "?action=unregisterPushToken" +
+        "&token=" +
+        encodeURIComponent(
+          savedToken
+        ) +
+        "&_=" +
+        Date.now();
+
+
+      try {
+
+        await fetch(
+          unregisterUrl,
+          {
+            method:
+              "GET",
+
+            mode:
+              "no-cors",
+
+            cache:
+              "no-store"
+          }
         );
 
       }
+      catch (e) {
+
+        console.warn(
+          e
+        );
+
+      }
+
+    }
+
+
+    try {
+
+      await messaging
+        .deleteToken();
+
+    }
+    catch (e) {
+
+      console.warn(
+        e
+      );
+
+    }
+
+
+    localStorage.removeItem(
+      "hangeoreum_push_token"
     );
 
-  </script>
+
+    localStorage.removeItem(
+      "hangeoreum_push_enabled"
+    );
+
+
+    setStatus(
+      "이 휴대폰의 한걸음 노트 알림을 껐어요."
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    setStatus(
+      "알림을 끄는 중 오류가 발생했어요."
+    );
+
+  }
+  finally {
+
+    setBusy(
+      false
+    );
+
+  }
+
+}
+
+
+function refreshStatus() {
+
+  if (
+    !("Notification" in window)
+  ) {
+
+    setStatus(
+      "이 브라우저에서는 알림 기능을 사용할 수 없습니다."
+    );
+
+    return;
+
+  }
+
+
+  const enabled =
+    localStorage.getItem(
+      "hangeoreum_push_enabled"
+    ) ===
+    "yes";
+
+
+  if (
+    Notification.permission ===
+      "granted" &&
+    enabled
+  ) {
+
+    setStatus(
+      "현재 이 휴대폰의 알림이 켜져 있어요."
+    );
+
+  }
+  else if (
+    Notification.permission ===
+      "denied"
+  ) {
+
+    setStatus(
+      "현재 브라우저에서 알림이 차단되어 있어요."
+    );
+
+  }
+  else {
+
+    setStatus(
+      "현재 이 휴대폰의 한걸음 노트 알림이 꺼져 있어요."
+    );
+
+  }
+
+}
+
+
+enableBtn.addEventListener(
+  "click",
+  enableNotifications
+);
+
+
+disableBtn.addEventListener(
+  "click",
+  disableNotifications
+);
+
+
+backBtn.addEventListener(
+  "click",
+  () => {
+
+    window.location.href =
+      APP_URL;
+
+  }
+);
+
+
+refreshStatus();
+
+</script>
 
 </body>
 </html>
